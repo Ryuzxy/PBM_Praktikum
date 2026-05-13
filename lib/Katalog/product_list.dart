@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../api/models/product_models.dart';
 import '../../api/service/product_service.dart';
+import 'add_product.dart';
+import '../Tugas/Pengumpulan.dart';
 
 
 class ProductListScreen extends StatefulWidget {
@@ -31,7 +33,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
         title: Text('Katalog Produk'),
         actions: [
           IconButton(
+            icon: Icon(Icons.assignment),
+            tooltip: 'Kumpulkan Tugas',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TaskSubmissionScreen()),
+              );
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.refresh),
+            tooltip: 'Refresh',
             onPressed: _refreshProducts,
           )
         ],
@@ -65,8 +78,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigasi ke halaman tambah produk / showModalBottomSheet
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProductScreen()),
+          );
+          if (result == true) {
+            _refreshProducts();
+          }
         },
         child: Icon(Icons.add),
       ),

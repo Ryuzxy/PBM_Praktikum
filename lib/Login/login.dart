@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../api/service/auth_service.dart';
+import '../Katalog/product_list.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,7 +27,11 @@ class _LoginScreenState extends State {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Selamat datang, ${result.user?.name}!')),
       );
-      // Navigasi ke halaman katalog produk
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProductListScreen()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result.message), backgroundColor: Colors.red),

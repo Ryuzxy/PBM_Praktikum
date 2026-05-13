@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import '../api/service/product_service.dart';
 
-class TaskSubmissionScreen extends StatefulWidget {
+class AddProductScreen extends StatefulWidget {
   @override
-  _TaskSubmissionScreenState createState() => _TaskSubmissionScreenState();
+  _AddProductScreenState createState() => _AddProductScreenState();
 }
 
-class _TaskSubmissionScreenState extends State<TaskSubmissionScreen> {
+class _AddProductScreenState extends State<AddProductScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _githubUrlController = TextEditingController();
   final _productService = ProductService();
   
   bool _isLoading = false;
@@ -23,20 +22,19 @@ class _TaskSubmissionScreenState extends State<TaskSubmissionScreen> {
       final name = _nameController.text;
       final price = int.tryParse(_priceController.text) ?? 0;
       final description = _descriptionController.text;
-      final githubUrl = _githubUrlController.text;
 
-      final success = await _productService.submitTask(name, price, description, githubUrl);
+      final success = await _productService.createProduct(name, price, description);
 
       setState(() => _isLoading = false);
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tugas berhasil dikumpulkan!')),
+          SnackBar(content: Text('Produk berhasil ditambahkan!')),
         );
         Navigator.pop(context, true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal mengumpulkan tugas.'), backgroundColor: Colors.red),
+          SnackBar(content: Text('Gagal menambahkan produk.'), backgroundColor: Colors.red),
         );
       }
     }
@@ -47,14 +45,13 @@ class _TaskSubmissionScreenState extends State<TaskSubmissionScreen> {
     _nameController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
-    _githubUrlController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pengumpulan Tugas')),
+      appBar: AppBar(title: Text('Tambah Produk')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -63,13 +60,13 @@ class _TaskSubmissionScreenState extends State<TaskSubmissionScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nama Produk Final'),
+                decoration: InputDecoration(labelText: 'Nama Produk'),
                 validator: (value) => value == null || value.isEmpty ? 'Nama produk tidak boleh kosong' : null,
               ),
               SizedBox(height: 16),
               TextFormField(
                 controller: _priceController,
-                decoration: InputDecoration(labelText: 'Harga Produk Final'),
+                decoration: InputDecoration(labelText: 'Harga Produk'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Harga tidak boleh kosong';
@@ -80,27 +77,16 @@ class _TaskSubmissionScreenState extends State<TaskSubmissionScreen> {
               SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Deskripsi Akhir'),
+                decoration: InputDecoration(labelText: 'Deskripsi'),
                 maxLines: 3,
                 validator: (value) => value == null || value.isEmpty ? 'Deskripsi tidak boleh kosong' : null,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _githubUrlController,
-                decoration: InputDecoration(labelText: 'URL GitHub Project'),
-                keyboardType: TextInputType.url,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'URL GitHub tidak boleh kosong';
-                  if (!value.startsWith('http')) return 'URL harus diawali dengan http atau https';
-                  return null;
-                },
               ),
               SizedBox(height: 32),
               _isLoading 
                 ? Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: _submit,
-                    child: Text('Kumpulkan Tugas'),
+                    child: Text('Simpan Produk'),
                   ),
             ],
           ),

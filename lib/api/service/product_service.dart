@@ -7,12 +7,10 @@ class ProductService {
   final String baseUrl = 'task.itprojects.web.id';
   final storage = const FlutterSecureStorage();
 
-  // Helper function untuk mengambil token
   Future<String?> _getToken() async {
     return await storage.read(key: 'token');
   }
 
-  // Helper function untuk menyiapkan Header dengan Bearer Token
   Future<Map<String, String>> _getHeaders() async {
     final token = await _getToken();
     return {
@@ -31,7 +29,22 @@ class ProductService {
       final response = await http.get(url, headers: headers);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List productsJson = data['products'];
+        List productsJson = [];
+        
+        if (data is List) {
+          productsJson = data;
+        } else if (data is Map) {
+          if (data['products'] is List) {
+            productsJson = data['products'];
+          } else if (data['data'] is List) {
+            productsJson = data['data'];
+          } else if (data['data'] is Map && data['data']['data'] is List) {
+            productsJson = data['data']['data']; // Handle pagination
+          } else if (data['data'] is Map && data['data']['products'] is List) {
+            productsJson = data['data']['products'];
+          }
+        }
+        
         return productsJson.map((json) => Product.fromJson(json)).toList();
       } else {
         throw Exception('Gagal memuat produk: ${response.statusCode}');
@@ -62,7 +75,6 @@ class ProductService {
     }
   }
 
-  // POST: Submit tugas akhir
   Future<bool> submitTask(String name, int price, String description, String githubUrl) async {
     final url = Uri.parse('https://$baseUrl/api/products/submit');
     final headers = await _getHeaders();

@@ -15,11 +15,13 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      roleName: json['role']['name'],
-      className: json['role']['class']['name'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      username: json['username'] ?? '',
+      roleName: json['role'] != null ? json['role']['name'] ?? '' : '',
+      className: (json['role'] != null && json['role']['class'] != null) 
+          ? json['role']['class']['name'] ?? '' 
+          : '',
     );
   }
 }
