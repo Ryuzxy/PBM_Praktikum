@@ -32,6 +32,12 @@ Berikut adalah beberapa tangkapan layar dari antarmuka aplikasi:
 | **Screenshot 5** | <img src="Img/Screenshot%202026-05-13%20192654.png" width="250"> |
 | **Screenshot 6** | <img src="Img/Screenshot%202026-05-13%20192727.png" width="250"> |
 
+### Tampilan di Perangkat
+| | |
+| :---: | :---: |
+| <img src="Img/WhatsApp%20Image%202026-05-13%20at%2019.43.00.jpeg" width="250"> | <img src="Img/WhatsApp%20Image%202026-05-13%20at%2019.43.00%20(1).jpeg" width="250"> |
+| <img src="Img/WhatsApp%20Image%202026-05-13%20at%2019.43.01.jpeg" width="250"> | <img src="Img/WhatsApp%20Image%202026-05-13%20at%2019.43.01%20(1).jpeg" width="250"> |
+
 ## Struktur Folder
 
 - `lib/Login/`: Logika dan antarmuka untuk halaman Login.
